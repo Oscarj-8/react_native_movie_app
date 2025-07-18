@@ -7,21 +7,19 @@ export const TMDB_CONFIG = {
   },
 };
 
-export const getMovies = async ( {query}: {query: string} ) => {
-    try{
-        const endpoint =  query ?
-        `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-        :
-        `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc` ;
-        const response = await fetch(endpoint,{
-            method: 'GET', 
-            headers: TMDB_CONFIG.header,
-        }); 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(error);
-        throw new Error("Failed to fetch movies");
-    }
-
-}
+export const getMovies = async ({ query }: { query: string }) => {
+  try {
+    const endpoint = query
+      ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: TMDB_CONFIG.header,
+    });
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch movies");
+  }
+};
