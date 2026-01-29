@@ -1,3 +1,5 @@
+import { MovieDetails } from "@/interfaces/interfaces";
+
 export const TMDB_CONFIG = {
   BASE_URL: "https://api.themoviedb.org/3",
   API_KEY: process.env.EXPO_PUBLIC_MOVIE_API_KEY,
@@ -21,5 +23,25 @@ export const getMovies = async ({ query }: { query: string }) => {
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch movies");
+  }
+};
+
+export const fethcMovieDetails = async (
+  movieId: string,
+): Promise<MovieDetails> => {
+  try {
+    const resp = await fetch(
+      `${TMDB_CONFIG.BASE_URL}/movie/${movieId}?api_key=${TMDB_CONFIG.API_KEY}&language=en-US`, {
+      method: "GET",
+      headers: TMDB_CONFIG.header,
+    })
+    if (!resp.ok) throw new Error("Failed to fetch movie details")
+
+    const data = await resp.json()
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch movie details");
   }
 };
