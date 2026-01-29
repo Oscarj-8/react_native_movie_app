@@ -1,25 +1,20 @@
-import { Movie } from "@/interfaces/interfaces";
-// 1. Import TablesDB instead of Databases
+import { Movie, TrendingMovie } from "@/interfaces/interfaces";
 import { Client, ID, Query, TablesDB } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
-// 2. Terminology: Collections are now Tables
 const TABLE_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
-// 3. Initialize TablesDB
 const tablesDB = new TablesDB(client);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
   try {
-    // 4. Use listRows instead of listDocuments
     const result = await tablesDB.listRows(DATABASE_ID, TABLE_ID, [
-      Query.equal("searchTerm", query), // Example query usage
+      Query.equal("searchTerm", query),
     ]);
-    // Logic for incrementing or creating a new record follows...
     if (result.total > 0) {
       // Use tablesDB.incrementRowColumn or tablesDB.updateRow
       const exisitngMovie = result.rows[0];
@@ -32,7 +27,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
         1,
       );
     } else {
-      // Use tablesDB.createRow
       await tablesDB.createRow({
         databaseId: DATABASE_ID,
         tableId: TABLE_ID,
@@ -49,5 +43,20 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
   } catch (error) {
     console.error(error);
     throw new Error("Failed to update search count");
+  }
+};
+
+export const getTrendingMovies = async (): Promise<
+  TrendingMovie[] | undefined
+> => {
+  try {
+    const result = await tablesDB.listRows(DATABASE_ID, TABLE_ID, [
+      Query.limit(5),
+      Query.orderDesc("count"),
+    ]);
+    return result.rows as unknown as TrendingMovie[];
+  } catch (error) {
+    console.error(error);
+    return undefined;
   }
 };

@@ -6,11 +6,19 @@ import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { getMovies } from "@/services/api";
 import MovieCard from "@/components/MovieCard";
+import { getTrendingMovies } from "@/services/appwrite";
+import TrendingCard from "@/components/trending-card";
 
 export default function Index() {
   const router = useRouter();
 
-  const { data: movies, loading, error, refetch, reset } = useFetch(
+  const {
+    data: trendingMovies,
+    loading: trendingMoviesLoading,
+    error: trendingMoviesError,
+  } = useFetch(getTrendingMovies)
+
+  const { data: movies, loading, error } = useFetch(
     () => getMovies({ query: "" })
   );
   return (
@@ -32,18 +40,36 @@ export default function Index() {
             }}
             placeholder="Search for a movie"
           />
+          {
+            trendingMovies && (
+              <View className="mt-10">
+                <Text className="text-lg text-white font-bold mb-1">Trending Movies</Text>
+                <FlatList
+                className="mb-4 mt-3"
+                  data={trendingMovies}
+                  renderItem={({ item, index }) => (
+                    <TrendingCard movie={item} index={index} />
+                  )}
+                  keyExtractor={item => item.movie_id.toString()}
+                  horizontal
+                  ItemSeparatorComponent={() => <View className="w-2" />}
+                   />
+              </View>
+            )
+          }
+
         </View>
-        {loading ? (
+        {loading || trendingMoviesLoading ? (
           <ActivityIndicator
             size="large"
             color="#fff"
             className="mt-10 self-center"
           />
         ) :
-          error ? (
+          error || trendingMoviesError ? (
         <Text className="text-white text-center">
           <Text className="text-white text-center">
-            Error: {error?.message}
+            Error: {error?.message || trendingMoviesError?.message}
           </Text>
         </Text>
       ) : movies ? (
