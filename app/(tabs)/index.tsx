@@ -11,7 +11,7 @@ export default function Index() {
   const router = useRouter();
 
   const { data: movies, loading, error, refetch, reset } = useFetch(
-    () => getMovies({ query: "iron man" })
+    () => getMovies({ query: "" })
   );
   return (
     <View className="flex-1 bg-primary">
