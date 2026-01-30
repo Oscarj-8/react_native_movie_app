@@ -98,7 +98,7 @@ const MovieDetails = () => {
                   lable={"Genere"}
                   value={movie?.genres.map((g) => g.name).join(" - ") || ""}
                 />
-                <View className="flex flex-row justify-between w-1/2">
+                <View className="flex flex-row justify-between w-1/2 gap-2">
                   <MovieInfo
                     lable="Budget"
                     value={`$${movie.budget / 1_000_000} million`}

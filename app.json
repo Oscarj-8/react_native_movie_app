@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "react_native_movie_app",
-    "slug": "react_native_movie_app",
+    "slug": "reeltime",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.abdulahi_muha.reeltime"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c1da422f-15c9-45c9-8259-643db622a369"
+      }
+    },
+    "owner": "abdulahi_muha"
   }
 }
